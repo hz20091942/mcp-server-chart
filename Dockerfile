@@ -7,17 +7,19 @@ ENV HUSKY=0
 ENV NODE_ENV=production
 
 # 安装全局依赖
-RUN npm install -g typescript tsc-alias
+RUN npm install -g typescript@5.8.3 tsc-alias
 
 # 复制 package 文件
 COPY package*.json ./
 
-# 安装依赖，包括开发依赖（因为需要 @types/node）
-RUN npm install --ignore-scripts && \
-    npm install --save-dev @types/node
+# 使用 npm ci 安装依赖，确保版本一致性
+RUN npm ci
 
-# 复制源代码
+# 复制源代码和配置文件
 COPY . .
+
+# 修改 tsconfig.json 以包含 node 类型
+RUN echo '{"compilerOptions":{"target":"ES6","module":"ESNext","moduleResolution":"bundler","outDir":"./build","rootDir":"./src","strict":true,"esModuleInterop":true,"skipLibCheck":true,"forceConsistentCasingInFileNames":true,"types":["node"]},"include":["src/**/*"],"exclude":["node_modules"],"tsc-alias":{"verbose":false,"resolveFullPaths":true,"fileExtensions":{"inputGlob":"{js,jsx,mjs}","outputCheck":["js","json","jsx","mjs"]}}}' > tsconfig.json
 
 # 构建项目
 RUN npm run build
