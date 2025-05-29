@@ -12,8 +12,9 @@ RUN npm install -g typescript tsc-alias
 # 复制 package 文件
 COPY package*.json ./
 
-# 安装依赖，跳过 prepare 脚本
-RUN npm install --ignore-scripts
+# 安装依赖，包括开发依赖（因为需要 @types/node）
+RUN npm install --ignore-scripts && \
+    npm install --save-dev @types/node
 
 # 复制源代码
 COPY . .
