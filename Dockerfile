@@ -2,17 +2,24 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
+# 设置环境变量，跳过 husky 安装
+ENV HUSKY=0
+ENV NODE_ENV=production
+
+# 复制 package 文件
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# 安装依赖，跳过 prepare 脚本
+RUN npm install --ignore-scripts
 
-# Copy application code
+# 复制源代码
 COPY . .
 
-# Build the application
+# 构建项目
 RUN npm run build
 
-# Command will be provided by smithery.yaml
+# 暴露端口
+EXPOSE 1122
+
+# 启动服务
 CMD ["npm", "run", "start", "--", "--transport", "streamable"]
