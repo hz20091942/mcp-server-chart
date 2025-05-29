@@ -7,7 +7,8 @@ ENV HUSKY=0
 ENV NODE_ENV=production
 
 # 安装全局依赖
-RUN npm install -g typescript@5.8.3 tsc-alias
+RUN npm install -g typescript@5.8.3 tsc-alias && \
+    npm install -g @types/node@20.11.24
 
 # 复制 package 文件
 COPY package*.json ./
