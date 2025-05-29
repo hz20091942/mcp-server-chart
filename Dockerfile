@@ -6,6 +6,9 @@ WORKDIR /app
 ENV HUSKY=0
 ENV NODE_ENV=production
 
+# 安装全局依赖
+RUN npm install -g typescript tsc-alias
+
 # 复制 package 文件
 COPY package*.json ./
 
