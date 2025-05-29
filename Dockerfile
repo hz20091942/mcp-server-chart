@@ -12,8 +12,8 @@ RUN npm install -g typescript@5.8.3 tsc-alias
 # 复制 package 文件
 COPY package*.json ./
 
-# 安装依赖，使用 --production=false 确保安装所有依赖
-RUN npm install --production=false --no-audit --no-fund --prefer-offline
+# 安装依赖，跳过所有生命周期脚本
+RUN npm install --ignore-scripts --no-audit --no-fund --prefer-offline
 
 # 复制源代码和配置文件
 COPY . .
@@ -25,7 +25,7 @@ RUN echo '{"compilerOptions":{"target":"ES6","module":"ESNext","moduleResolution
 RUN npm run build
 
 # 清理开发依赖
-RUN npm prune --production
+RUN npm prune --production --ignore-scripts
 
 # 暴露端口
 EXPOSE 1122
